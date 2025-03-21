@@ -17,6 +17,16 @@ class Student
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $result;
     }
+    public function loginByMSSV($MaSV)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE MaSV = :MaSV";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':MaSV', $MaSV);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+        return $result; // Trả về thông tin sinh viên nếu tìm thấy, hoặc null nếu không tìm thấy
+    }
 
     public function getStudentById($id)
     {

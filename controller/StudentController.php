@@ -165,6 +165,36 @@ class StudentController
         }
     }
         
+public function login()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $MaSV = $_POST['MaSV'] ?? '';
+
+        // Kiểm tra nếu MSSV bị bỏ trống
+        if (empty($MaSV)) {
+            echo "Lỗi: Mã số sinh viên không được để trống.";
+            return;
+        }
+
+        // Gọi model để kiểm tra MSSV
+        $student = $this->studentModel->loginByMSSV($MaSV);
+
+        if ($student) {
+            // Lưu thông tin đăng nhập vào session
+            session_start();
+            $_SESSION['student'] = $student;
+
+            // Chuyển hướng đến trang danh sách sinh viên
+            header('Location: /demo/kiemtra/Student');
+            exit;
+        } else {
+            echo "Lỗi: Mã số sinh viên không tồn tại.";
+        }
+    } else {
+        // Hiển thị form đăng nhập
+        include __DIR__ . '/../views/student/login.php';
+    }
+}
 
     public function delete($id)
     {
@@ -177,4 +207,6 @@ class StudentController
         }
     }
 }
+
+
 ?>
